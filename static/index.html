@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Boardroom — Autonomous Executive Swarm</title>
+  <!-- Google Fonts & Material Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=the_boardroom_v28">
+  <!-- Markdown Renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- THE BOARDROOM HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="stratum-logo" id="btn-home-logo" title="Back to Landing Box">
+          <svg class="logo-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2.5" y="3.5" width="19" height="17" rx="3.5" stroke="#6366f1" stroke-width="2" fill="rgba(99, 102, 241, 0.08)"/>
+            <path d="M6 8.5H18" stroke="#4f46e5" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 12.5H14" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 16.5H11" stroke="#818cf8" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="17.5" cy="14.5" r="2" fill="#10b981"/>
+          </svg>
+          <div class="brand-text">
+            <span class="brand-title">The <span class="brand-accent">Boardroom</span></span>
+            <span class="brand-sub">Autonomous Executive Swarm</span>
+          </div>
+        </div>
+
+        <!-- TOP VIEW MODE TOGGLE SWITCH (Chat View vs. Meeting Room) -->
+        <div class="view-switch-bar" id="view-switch-bar" style="display: none;">
+          <button class="view-switch-tab active" id="tab-mode-chat" onclick="switchViewMode('chat')">
+            <span class="material-icons-outlined">forum</span>
+            Chat View
+          </button>
+          <button class="view-switch-tab" id="tab-mode-meeting" onclick="switchViewMode('meeting')">
+            <span class="material-icons-outlined">groups</span>
+            Real Interaction Room 👥
+          </button>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="connection-chip" id="connection-status">
+          <span class="status-dot disconnected"></span>
+          <span id="connection-text">Connecting to LM Studio...</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button class="g-button secondary text-btn" id="btn-download-pdf-nav" onclick="downloadExecutivePDF()" title="Download Full Executive Quality Scorecard, Transcripts & Codebase PDF">
+          <span class="material-icons-outlined" style="color: #ef4444;">picture_as_pdf</span>
+          Download PDF
+        </button>
+        <button class="g-button secondary text-btn" id="btn-interject-header" onclick="toggleDirectiveModal()" title="Interject Live Executive Command">
+          <span class="material-icons-outlined" style="color: #fbbc04;">flash_on</span>
+          Interject Directive
+        </button>
+        <button class="g-button secondary text-btn" id="btn-new-initiative-header" style="display: none;" onclick="showLandingHero()">
+          <span class="material-icons-outlined">add</span>
+          New Initiative
+        </button>
+        <button class="g-button secondary" id="btn-open-tier-modal">
+          <span class="material-icons-outlined">tune</span>
+          Model Tiers
+        </button>
+        <div class="user-avatar" title="Local Executive Workspace">PMO</div>
+      </div>
+    </header>
+
+    <!-- LANDING HERO SCREEN (Query Box + PDF Upload + Interaction Mode Picker) -->
+    <div class="landing-hero-container" id="landing-hero">
+      <div class="hero-card">
+        <div class="hero-header">
+          <div class="hero-badge">⚡ THE BOARDROOM</div>
+          <h1>Autonomous Executive Strategy & Delivery</h1>
+          <p>Commission an autonomous multi-agent Boardroom hierarchy to decompose, debate, and engineer production-grade ADRs and software.</p>
+        </div>
+
+        <!-- QUERY INPUT BOX -->
+        <div class="input-box-wrapper">
+          <textarea id="hero-prompt-input" rows="4" placeholder="e.g. Architect a Zero-Trust Banking Payment Gateway complying with SOC2 & PCI-DSS standards..."></textarea>
+
+          <!-- PDF UPLOAD AREA -->
+          <div class="pdf-upload-bar">
+            <label for="pdf-file-input" class="pdf-upload-btn" id="btn-trigger-pdf">
+              <span class="material-icons-outlined">attach_file</span>
+              Attach Requirement Document (.pdf)
+            </label>
+            <input type="file" id="pdf-file-input" accept=".pdf" style="display: none;">
+
+            <div class="pdf-file-badge" id="pdf-file-badge" style="display: none;">
+              <span class="material-icons-outlined icon-red">picture_as_pdf</span>
+              <span id="pdf-filename-text">document.pdf</span>
+              <span class="pdf-char-count" id="pdf-char-count">(0 chars)</span>
+              <button type="button" class="pdf-remove-btn" onclick="removeAttachedPdf()">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT PRESET TAGS -->
+        <div class="hero-presets">
+          <span class="preset-label">Quick Scenarios:</span>
+          <span class="preset-tag" onclick="selectPreset(1)" style="background: #e0e7ff; color: #4338ca; font-weight: 700; border: 1.5px solid #818cf8; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);">🚀 Amazon Challenge 08 (Retail Concurrency)</span>
+          <span class="preset-tag" onclick="selectPreset(2)">🔐 Zero-Trust Banking API</span>
+          <span class="preset-tag" onclick="selectPreset(3)">⚡ 10M Event Stream Engine</span>
+        </div>
+
+        <!-- STREAMLINED INFERENCE ENGINE & MODEL BAR -->
+        <div class="unified-model-bar" id="unified-model-bar" style="margin-top: 14px; padding: 14px 18px; border-radius: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color);">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;">
+            <!-- INFERENCE PROVIDER TOGGLE -->
+            <div class="provider-toggle-group">
+              <button type="button" class="provider-toggle-btn active" id="btn-provider-local" onclick="switchProvider('local')">
+                <span class="provider-icon">🖥️</span>
+                <span class="provider-name">Local LLM (LM Studio)</span>
+              </button>
+              <button type="button" class="provider-toggle-btn" id="btn-provider-openrouter" onclick="switchProvider('openrouter')">
+                <span class="provider-icon">⚡</span>
+                <span class="provider-name">OpenRouter (Cloud Speed)</span>
+              </button>
+            </div>
+
+            <!-- CONFIGURE BUTTON -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div class="model-quick-presets" id="hero-model-presets" style="display: none;"></div>
+              <button type="button" class="g-button secondary compact-btn" onclick="openModelModal()" style="font-size: 12px; padding: 6px 12px; border-radius: 8px;" title="Configure model endpoints and individual tier assignments">
+                <span class="material-icons-outlined" style="font-size: 15px;">tune</span>
+                Configure Models
+              </button>
+            </div>
+          </div>
+
+          <!-- OPENROUTER CONTROLS BAR (Shown when OpenRouter is selected) -->
+          <div class="openrouter-controls-bar" id="openrouter-controls-bar" style="display: none; margin-top: 10px;">
+            <div class="openrouter-key-row">
+              <span class="material-icons-outlined key-icon">key</span>
+              <input type="password" id="openrouter-api-key" class="openrouter-key-input" placeholder="Paste OpenRouter API Key (sk-or-v1-...) · Persisted locally" oninput="onApiKeyChanged(this.value)">
+              <button type="button" class="key-vis-btn" onclick="toggleApiKeyVisibility('openrouter-api-key', 'hero-key-icon')" title="Toggle key visibility">
+                <span class="material-icons-outlined" id="hero-key-icon">visibility</span>
+              </button>
+              <button type="button" class="g-button secondary text-btn refresh-models-btn" onclick="fetchOpenRouterModels()" title="Query OpenRouter for live Gemma models">
+                <span class="material-icons-outlined">refresh</span>
+                <span>Refresh Models</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- HIDDEN PRESERVED SELECTORS FOR SCRIPT COMPATIBILITY -->
+          <div style="display: none;">
+            <strong id="hero-bar-title">Swarm Model Architecture</strong>
+            <span id="hero-bar-subtitle">Active Models</span>
+            <span id="hero-bar-icon">⚡</span>
+            <select id="hero-model-tier1"></select>
+            <select id="hero-model-tier2"></select>
+            <select id="hero-model-tier3"></select>
+            <select id="hero-model-red"></select>
+          </div>
+        </div>
+
+        <!-- COMPACT GOVERNANCE & EXPERIENCE BAR -->
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+          <!-- ORG MODEL -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Organization:</span>
+            <div class="org-mode-pills" style="margin: 0; display: inline-flex; gap: 6px;">
+              <button type="button" class="org-mode-pill active" id="btn-org-dynamic" onclick="setSwarmOrgMode('dynamic')" style="padding: 6px 14px; min-width: auto;">
+                <span class="pill-icon" style="font-size: 14px;">⚡</span>
+                <span style="font-size: 12px; font-weight: 600;">Autonomous Dynamic</span>
+              </button>
+              <button type="button" class="org-mode-pill" id="btn-org-classic" onclick="setSwarmOrgMode('classic')" style="padding: 6px 14px; min-width: auto;">
+                <span class="pill-icon" style="font-size: 14px;">🏛️</span>
+                <span style="font-size: 12px; font-weight: 600;">Fixed Boardroom (7 Agents)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- EXPERIENCE MODE (COMPACT PILLS) -->
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Experience:</span>
+            <div style="display: inline-flex; gap: 6px;">
+              <button type="button" class="mode-card selected" id="mode-card-chat" onclick="selectInteractionMode('chat')" style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; border: 1.5px solid var(--border-color); background: var(--bg-card);">
+                <span>💬</span> <span>Executive Chat</span>
+              </button>
+              <button type="button" class="mode-card" id="mode-card-meeting" onclick="selectInteractionMode('meeting')" style="padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; border: 1.5px solid var(--border-color); background: var(--bg-card);">
+                <span>👥</span> <span>Interaction Room</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIMARY LAUNCH BUTTON -->
+        <div style="display: flex; gap: 14px; align-items: stretch; width: 100%; margin-top: 16px;">
+          <button type="button" class="g-button primary hero-launch-btn" id="btn-start-hero" style="flex: 1; min-width: 260px; margin: 0; padding: 14px 28px; cursor: pointer; font-size: 15px; font-weight: 700; letter-spacing: 0.3px; border-radius: 10px;">
+            <span class="material-icons-outlined" style="font-size: 22px;">rocket_launch</span>
+            Convene The Boardroom
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REAL-TIME DISPUTE & ARBITRATION TRIBUNAL ALERT BANNER -->
+    <div class="arbitration-banner" id="arbitration-banner" style="display: none;">
+      <div class="banner-icon">⚖️</div>
+      <div class="banner-content">
+        <strong id="arbitration-title">Arbitration Tribunal Convened</strong>
+        <p id="arbitration-detail">Cost Auditor escalated Cloud Architect to Ops PM.</p>
+      </div>
+      <button class="banner-close-btn" onclick="dismissArbitrationBanner()">✕</button>
+    </div>
+
+    <!-- LIVE METRICS DASHBOARD WIDGETS BAR -->
+    <div class="metrics-dashboard-bar" id="metrics-dashboard-bar" style="display: none;">
+      <div class="metric-card metric-cost">
+        <div class="metric-icon">💰</div>
+        <div class="metric-info">
+          <span class="metric-label">EST. MONTHLY SPEND</span>
+          <span class="metric-value" id="val-net-cost">$0.00</span>
+          <span class="metric-sub" id="val-spot-savings">Spot Savings: $0.00</span>
+        </div>
+      </div>
+
+      <div class="metric-card metric-security">
+        <div class="metric-icon">🛡️</div>
+        <div class="metric-info">
+          <span class="metric-label">ZERO-TRUST COMPLIANCE</span>
+          <span class="metric-value" id="val-sec-risk">Score 0.0</span>
+          <span class="metric-sub" id="val-sec-status">Status: Initializing</span>
+        </div>
+      </div>
+
+      <div class="metric-card metric-sla">
+        <div class="metric-icon">🧪</div>
+        <div class="metric-info">
+          <span class="metric-label">SLA RELIABILITY</span>
+          <span class="metric-value" id="val-sla-target">99.9% Uptime</span>
+          <span class="metric-sub" id="val-sla-rto">RTO: --</span>
+        </div>
+      </div>
+
+      <div class="metric-card metric-override" onclick="toggleDirectiveModal()" title="Click to interject executive override">
+        <div class="metric-icon">⚡</div>
+        <div class="metric-info">
+          <span class="metric-label">EXEC DIRECTIVES</span>
+          <span class="metric-value" id="val-directives-count">0 Active</span>
+          <span class="metric-sub">Interject Directive ➔</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN WORKSPACE VIEW (Hidden initially until launched) -->
+    <main class="main-layout" id="workspace-layout" style="display: none;">
+      
+      <!-- MODE 1: CHAT VIEW SIDEBAR & FEED -->
+      <aside class="sidebar-left" id="chat-sidebar">
+        <!-- HIERARCHY TREE VIEW -->
+        <div class="card hierarchy-card">
+          <div class="card-title">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="material-icons-outlined icon-green">account_tree</span>
+              <span>The Boardroom Council</span>
+            </div>
+            <span class="roster-mode-badge" id="roster-mode-badge">⚡ Autonomous Dynamic</span>
+          </div>
+
+          <!-- TIER 1: EXECUTIVE LEAD (ALWAYS SEATED & ACTIVE) -->
+          <div class="tier-section" id="tier1-section">
+            <div class="tier-header tier1-badge">
+              <span>TIER 1 · Executive Lead</span>
+              <span class="model-tag" id="tier1-model-name">LM Studio</span>
+            </div>
+            <div class="agent-chip-item active-chip" id="chip-head_pmo">
+              <span class="agent-avatar">👨‍💼</span>
+              <div class="agent-meta">
+                <span class="agent-name">Head of PMO</span>
+                <span class="agent-role">Executive Portfolio Lead & Orchestrator</span>
+              </div>
+              <span class="agent-indicator idle"></span>
+            </div>
+          </div>
+
+          <!-- AUTONOMOUS DYNAMIC ROSTER WRAPPER (DEFAULT) -->
+          <div id="dynamic-roster-wrapper">
+            <!-- Initial state before Head Orchestrator analyzes problem in Phase 0 -->
+            <div class="dynamic-roster-placeholder" id="dynamic-roster-placeholder">
+              <div class="placeholder-icon">⚡</div>
+              <div class="placeholder-title">Dynamic Swarm Hierarchy</div>
+              <p class="placeholder-sub">Head Orchestrator assesses problem complexity in Phase 0 to commission custom managers, specialists, and reporting lines.</p>
+            </div>
+
+            <!-- Commissioned Roster (Populated dynamically as agent_hired events arrive) -->
+            <div id="dynamic-commissioned-container" style="display: none;">
+              <!-- Tier 2 Program Managers -->
+              <div class="tier-section" id="dyn-tier2-section" style="display: none;">
+                <div class="tier-header tier2-badge">
+                  <span>TIER 2 · Program Managers</span>
+                  <span class="model-tag" id="dyn-tier2-model-name">LM Studio</span>
+                </div>
+                <div id="dyn-tier2-chips"></div>
+              </div>
+
+              <!-- Tier 3 Domain Specialists -->
+              <div class="tier-section" id="dyn-tier3-section" style="display: none;">
+                <div class="tier-header tier3-badge">
+                  <span>TIER 3 · Domain Specialists</span>
+                  <span class="model-tag" id="dyn-tier3-model-name">LM Studio</span>
+                </div>
+                <div id="dyn-tier3-chips"></div>
+              </div>
+
+              <!-- Adversarial Red Team -->
+              <div class="tier-section" id="dyn-redteam-section" style="display: none;">
+                <div class="tier-header" style="background: #fce8e6; color: #c5221f;">
+                  <span>ADVERSARIAL RED TEAM</span>
+                  <span class="model-tag" id="dyn-redteam-model-name">LM Studio</span>
+                </div>
+                <div id="dyn-redteam-chips"></div>
+              </div>
+
+              <!-- Phase 7: Software Engineering Execution Squad -->
+              <div class="tier-section" id="dyn-eng-squad-section" style="display: none;">
+                <div class="tier-header" style="background: #e0e7ff; color: #3730a3; border-left: 3px solid #6366f1;">
+                  <span>💻 PHASE 7 · SOFTWARE ENGINEERING SQUAD</span>
+                  <span class="model-tag" id="dyn-eng-model-name">Execution Squad</span>
+                </div>
+                <div id="dyn-eng-squad-chips"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FIXED BENCHMARK ROSTER WRAPPER (VISIBLE ONLY IN FIXED PMO SWARM MODE) -->
+          <div id="classic-roster-wrapper" style="display: none;">
+            <div class="tier-section">
+              <div class="tier-header tier2-badge">
+                <span>TIER 2 · Domain PMs</span>
+                <span class="model-tag" id="classic-tier2-model-name">LM Studio</span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-tech_pm">
+                <span class="agent-avatar">👨‍💻</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Engineering PM</span>
+                  <span class="agent-role">Technical Architecture & Concurrency</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-ops_pm">
+                <span class="agent-avatar">👩‍💼</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Ops & Finance PM</span>
+                  <span class="agent-role">FinOps Limits & Governance</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+            </div>
+
+            <div class="tier-section">
+              <div class="tier-header tier3-badge">
+                <span>TIER 3 · Domain Specialists</span>
+                <span class="model-tag" id="classic-tier3-model-name">LM Studio</span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-cloud_architect">
+                <span class="agent-avatar">🏗️</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Cloud Architect</span>
+                  <span class="agent-role">Distributed Concurrency</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-cost_auditor">
+                <span class="agent-avatar">💰</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Cost Auditor</span>
+                  <span class="agent-role">Independent Math & Budgets</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-security_officer">
+                <span class="agent-avatar">🛡️</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Security Lead</span>
+                  <span class="agent-role">Zero-Trust & Compliance</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+              <div class="agent-chip-item" id="classic-chip-qa_lead">
+                <span class="agent-avatar">🧪</span>
+                <div class="agent-meta">
+                  <span class="agent-name">QA & Reliability</span>
+                  <span class="agent-role">Chaos & SLA Benchmarks</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+              <div class="agent-chip-item red-team-chip" id="classic-chip-devils_advocate">
+                <span class="agent-avatar">⚖️</span>
+                <div class="agent-meta">
+                  <span class="agent-name">Devil's Advocate</span>
+                  <span class="agent-role">Adversarial Red Team Audit</span>
+                </div>
+                <span class="agent-indicator idle"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTER PANEL: LIVE WAR ROOM CHAT FEED (Mode 1) -->
+      <section class="main-content" id="chat-center-panel">
+        <div class="feed-header">
+          <div class="feed-title">
+            <span class="material-icons-outlined icon-red">forum</span>
+            The Boardroom Live Deliberation Transcript
+          </div>
+          <div class="feed-filters">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="debate">Debates ⚔️</button>
+            <button class="filter-tab" data-filter="revert_question">Q&A Clarifications ❓</button>
+            <button class="filter-tab" data-filter="tier1">Tier 1</button>
+          </div>
+        </div>
+
+        <div class="status-banner" id="status-banner" style="display: none;">
+          <div class="spinner"></div>
+          <span id="status-message">The Boardroom In Session...</span>
+        </div>
+
+        <div class="transcript-feed" id="transcript-feed">
+          <div class="empty-state">
+            <span class="material-icons-outlined large-icon">groups</span>
+            <h3>The Boardroom Ready</h3>
+            <p>No active initiative running. Click '➕ New Initiative' in the top bar to configure and convene The Boardroom.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODE 2: VISUAL REAL INTERACTION MINIATURE PMO OFFICE VIEW -->
+      <section class="meeting-room-container" id="meeting-room-view" style="display: none;">
+
+        <!-- HIGH-FIDELITY ISOMETRIC 3D OFFICE VIEWPORT -->
+        <div class="office-viewport">
+          
+          <!-- TOP VIEWPORT CONTROLS BAR (ZOOM CONTROLS & SWARM LOG TOGGLE) -->
+          <div class="viewport-top-bar">
+            <div class="room-status-indicator" id="meeting-status-text">
+              <span class="status-pulse-dot"></span>
+              The Boardroom Swarm Active (7 AI Agents Seated)
+            </div>
+
+            <div class="controls-right-flex">
+              <!-- VIEWPORT PAN & ZOOM CONTROLS -->
+              <div class="zoom-controls-bar">
+                <button class="zoom-btn" onclick="zoomViewport(0.15)" title="Zoom In (+)"><span class="material-icons-outlined">add</span></button>
+                <button class="zoom-btn" onclick="zoomViewport(-0.15)" title="Zoom Out (-)"><span class="material-icons-outlined">remove</span></button>
+                <button class="zoom-btn reset-btn" id="zoom-level-badge" onclick="resetViewportZoom()" title="Reset Zoom">100%</button>
+              </div>
+
+              <button class="drawer-toggle-btn active" id="btn-toggle-hierarchy-lines" onclick="toggleHierarchyLines()" title="Toggle Organizational Reporting Lines">
+                <span class="material-icons-outlined">account_tree</span>
+                <span>Reporting Lines 🌐</span>
+              </button>
+
+              <button class="drawer-toggle-btn" id="btn-toggle-drawer" onclick="toggleSwarmDrawer()">
+                <span class="material-icons-outlined">receipt_long</span>
+                Swarm Log & Executive ADR 📜
+              </button>
+
+              <button class="drawer-toggle-btn agentic-repo-btn" id="btn-toggle-repo-drawer" onclick="openRepoDrawer()" title="View Autonomous Codebase & Live Terminal">
+                <span class="material-icons-outlined" style="color: #6366f1;">terminal</span>
+                <span>Codebase & Terminal 💻</span>
+                <span class="repo-badge-count" id="repo-badge-count" style="display: none;">0 files</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CANVAS ZOOM & PAN WRAPPER CONTAINER -->
+          <div class="canvas-zoom-wrapper" id="canvas-zoom-wrapper" style="background-image: url('/static/stratum_office_exec_only.jpg?v=pristine_seamless_v14') !important;">
+
+            <!-- DYNAMIC WORKSTATION TABLES (APPEAR DYNAMICALLY AS AGENTS ARE HIRED) -->
+            <div class="office-tables-overlay" id="office-tables-overlay">
+              <img src="/static/dolls/table_tech_pm.png?v=pristine_seamless_v14" class="table-layer" id="table-tech_pm" alt="Engineering PM Desk" style="display: none;">
+              <img src="/static/dolls/table_ops_pm.png?v=pristine_seamless_v14" class="table-layer" id="table-ops_pm" alt="Ops PM Desk" style="display: none;">
+              <img src="/static/dolls/table_cloud_architect.png?v=pristine_seamless_v14" class="table-layer" id="table-cloud_architect" alt="Cloud Architect Desk" style="display: none;">
+              <img src="/static/dolls/table_cost_auditor.png?v=pristine_seamless_v14" class="table-layer" id="table-cost_auditor" alt="Cost Auditor Desk" style="display: none;">
+              <img src="/static/dolls/table_security_officer.png?v=pristine_seamless_v14" class="table-layer" id="table-security_officer" alt="Security Lead Desk" style="display: none;">
+              <img src="/static/dolls/table_qa_lead.png?v=pristine_seamless_v14" class="table-layer" id="table-qa_lead" alt="QA Lead Desk" style="display: none;">
+            </div>
+
+            <!-- DYNAMIC AGENT DOLL LAYERS (SEATED DYNAMICALLY AS AGENTS ARE HIRED) -->
+            <div class="office-dolls-overlay" id="office-dolls-overlay">
+              <img src="/static/dolls/layer_head_pmo.png?v=pristine_seamless_v14" class="doll-layer seated" id="doll-head_pmo" alt="Executive Lead Doll">
+              <img src="/static/dolls/layer_tech_pm.png?v=pristine_seamless_v14" class="doll-layer" id="doll-tech_pm" alt="Engineering PM Doll" style="display: none;">
+              <img src="/static/dolls/layer_ops_pm.png?v=pristine_seamless_v14" class="doll-layer" id="doll-ops_pm" alt="Ops PM Doll" style="display: none;">
+              <img src="/static/dolls/layer_cloud_architect.png?v=pristine_seamless_v14" class="doll-layer" id="doll-cloud_architect" alt="Cloud Architect Doll" style="display: none;">
+              <img src="/static/dolls/layer_cost_auditor.png?v=pristine_seamless_v14" class="doll-layer" id="doll-cost_auditor" alt="Cost Auditor Doll" style="display: none;">
+              <img src="/static/dolls/layer_security_officer.png?v=pristine_seamless_v14" class="doll-layer" id="doll-security_officer" alt="Security Lead Doll" style="display: none;">
+              <img src="/static/dolls/layer_qa_lead.png?v=pristine_seamless_v14" class="doll-layer" id="doll-qa_lead" alt="QA Lead Doll" style="display: none;">
+              <img src="/static/dolls/layer_devils_advocate.png?v=pristine_seamless_v14" class="doll-layer" id="doll-devils_advocate" alt="Devil's Advocate Doll" style="display: none;">
+            </div>
+
+            <!-- DYNAMIC HIERARCHY & ESCALATION CONNECTING SVG OVERLAY -->
+            <svg class="office-svg-overlay" id="office-svg-overlay" width="100%" height="100%">
+              <defs>
+                <marker id="qa-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#ec4899" />
+                </marker>
+                <marker id="escalation-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444" />
+                </marker>
+                <marker id="manager-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#f59e0b" />
+                </marker>
+                <marker id="ruling-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+                </marker>
+                <filter id="line-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <filter id="escalation-glow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4.5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <g id="svg-hierarchy-lines"></g>
+              <g id="svg-escalation-lines"></g>
+              <g id="svg-connections-group"></g>
+            </svg>
+
+            <!-- HOTSPOT DESK OVERLAYS (ALIGNED TO THE 7 SINGLE AGENT DOLLS) -->
+            <!-- 1. HEAD OF PMO (TOP CENTER EXECUTIVE DESK) -->
+            <div class="desk-hotspot placement-side-right tier1-hotspot" id="meeting-card-head_pmo" data-agent="head_pmo" style="left: 50%; top: 26%;">
+              <div class="floating-agent-pill tier1-pill">
+                <span class="pill-avatar">👨‍💼</span>
+                <span class="pill-title">Head of PMO</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-head_pmo" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-head_pmo" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-head_pmo" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Strategizing Directive...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-right" id="bubble-head_pmo" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">👑 Head of PMO</span>
+                  <span class="phase-tag" id="phase-head_pmo">Phase 1</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-head_pmo"></div>
+              </div>
+            </div>
+
+            <!-- 2. ENGINEERING PM (MIDDLE LEFT MANAGER DESK) -->
+            <div class="desk-hotspot placement-side-left tier2-hotspot" id="meeting-card-tech_pm" data-agent="tech_pm" style="left: 36%; top: 42%; display: none;">
+              <div class="floating-agent-pill tier2-pill">
+                <span class="pill-avatar">👨‍💻</span>
+                <span class="pill-title">Engineering PM</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-tech_pm" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-tech_pm" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-tech_pm" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Drafting Workstreams...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left" id="bubble-tech_pm" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">📊 Engineering PM</span>
+                  <span class="phase-tag" id="phase-tech_pm">Phase 2</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-tech_pm"></div>
+              </div>
+            </div>
+
+            <!-- 3. OPS & FINANCE PM (MIDDLE RIGHT MANAGER DESK) -->
+            <div class="desk-hotspot placement-side-right tier2-hotspot" id="meeting-card-ops_pm" data-agent="ops_pm" style="left: 64%; top: 42%; display: none;">
+              <div class="floating-agent-pill tier2-pill">
+                <span class="pill-avatar">👩‍💼</span>
+                <span class="pill-title">Ops & Finance PM</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-ops_pm" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-ops_pm" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-ops_pm" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Evaluating FinOps Limits...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-right" id="bubble-ops_pm" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">👩‍💼 Ops & Finance PM</span>
+                  <span class="phase-tag" id="phase-ops_pm">Phase 2</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-ops_pm"></div>
+              </div>
+            </div>
+
+            <!-- 4. CLOUD ARCHITECT (FRONT FAR LEFT SPECIALIST DESK) -->
+            <div class="desk-hotspot placement-side-left tier3-hotspot" id="meeting-card-cloud_architect" data-agent="cloud_architect" style="left: 20.5%; top: 67%; display: none;">
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">🏗️</span>
+                <span class="pill-title">Cloud Architect</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-cloud_architect" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-cloud_architect" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-cloud_architect" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Designing Architecture...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left" id="bubble-cloud_architect" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">🏗️ Cloud Architect</span>
+                  <span class="phase-tag" id="phase-cloud_architect">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-cloud_architect"></div>
+              </div>
+            </div>
+
+            <!-- 5. COST AUDITOR (FRONT CENTER LEFT SPECIALIST DESK) -->
+            <div class="desk-hotspot placement-side-left tier3-hotspot" id="meeting-card-cost_auditor" data-agent="cost_auditor" style="left: 40%; top: 67%; display: none;">
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">💰</span>
+                <span class="pill-title">Cost Auditor</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-cost_auditor" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-cost_auditor" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-cost_auditor" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Auditing OpEx...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left" id="bubble-cost_auditor" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">💰 Cost Auditor</span>
+                  <span class="phase-tag" id="phase-cost_auditor">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-cost_auditor"></div>
+              </div>
+            </div>
+
+            <!-- 6. CISO SECURITY LEAD (FRONT CENTER RIGHT SPECIALIST DESK) -->
+            <div class="desk-hotspot placement-side-right tier3-hotspot" id="meeting-card-security_officer" data-agent="security_officer" style="left: 60%; top: 67%; display: none;">
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">🛡️</span>
+                <span class="pill-title">Security Lead</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-security_officer" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-security_officer" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-security_officer" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Auditing Zero-Trust...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-right" id="bubble-security_officer" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">🛡️ Security Lead</span>
+                  <span class="phase-tag" id="phase-security_officer">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-security_officer"></div>
+              </div>
+            </div>
+
+            <!-- 7. QA & SRE LEAD (FRONT FAR RIGHT SPECIALIST DESK) -->
+            <div class="desk-hotspot placement-side-right tier3-hotspot" id="meeting-card-qa_lead" data-agent="qa_lead" style="left: 79.5%; top: 67%; display: none;">
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">🧪</span>
+                <span class="pill-title">QA & SRE Lead</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-qa_lead" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-qa_lead" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-qa_lead" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Testing Chaos...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-right" id="bubble-qa_lead" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">🧪 QA & SRE Lead</span>
+                  <span class="phase-tag" id="phase-qa_lead">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-qa_lead"></div>
+              </div>
+            </div>
+
+            <!-- 8. DEVIL'S ADVOCATE (RED TEAM AUDITOR PODIUM) -->
+            <div class="desk-hotspot placement-side-left red-team-hotspot" id="meeting-card-devils_advocate" data-agent="devils_advocate" style="left: 12%; top: 60%; display: none;">
+              <div class="virtual-desk red-team-desk">
+                <span class="desk-icon">⚖️</span>
+                <span class="desk-label">RED TEAM AUDIT DESK</span>
+              </div>
+              <div class="floating-agent-pill red-team-pill">
+                <span class="pill-avatar">⚖️</span>
+                <span class="pill-title">Devil's Advocate</span>
+                <span class="active-dot red-dot">● Red Team</span>
+              </div>
+              <div class="hired-banner red-hired" id="hired-devils_advocate" style="display: none;">✨ COMMISSIONED</div>
+              <div class="asking-banner red-banner" id="asking-devils_advocate" style="display: none;">⚔️ ATTACKING</div>
+              <div class="callout-banner red-banner" id="callout-devils_advocate" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud red-cloud" id="think-devils_advocate" style="display: none;">
+                <span class="think-pulse">🔥</span>
+                <span class="think-text">Hunting Failure Modes...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left red-bubble" id="bubble-devils_advocate" style="display: none;">
+                <div class="bubble-header red-header">
+                  <span class="agent-title-tag">⚖️ Devil's Advocate</span>
+                  <span class="phase-tag" id="phase-devils_advocate">Phase 4 Red Team</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-devils_advocate"></div>
+              </div>
+            </div>
+
+            <!-- 9. DEVOPS ENGINEER (TECHNICAL SRE DESK) -->
+            <div class="desk-hotspot placement-side-left tier3-hotspot" id="meeting-card-devops_engineer" data-agent="devops_engineer" style="left: 13%; top: 54%; display: none;">
+              <div class="virtual-desk specialist-desk devops-desk">
+                <span class="desk-icon">⚙️</span>
+                <span class="desk-label">DEVOPS & SRE DESK</span>
+              </div>
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">⚙️</span>
+                <span class="pill-title">DevOps Lead</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-devops_engineer" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-devops_engineer" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-devops_engineer" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Auditing Deployments...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left" id="bubble-devops_engineer" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">⚙️ DevOps Lead</span>
+                  <span class="phase-tag" id="phase-devops_engineer">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-devops_engineer"></div>
+              </div>
+            </div>
+
+            <!-- 10. DATA PIPELINE ENGINEER (DATA STREAMING DESK) -->
+            <div class="desk-hotspot placement-side-left tier3-hotspot" id="meeting-card-data_engineer" data-agent="data_engineer" style="left: 27%; top: 54%; display: none;">
+              <div class="virtual-desk specialist-desk data-desk">
+                <span class="desk-icon">📊</span>
+                <span class="desk-label">DATA PIPELINE DESK</span>
+              </div>
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">📊</span>
+                <span class="pill-title">Data Pipeline Lead</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-data_engineer" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-data_engineer" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-data_engineer" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Auditing Streams...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-left" id="bubble-data_engineer" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">📊 Data Pipeline Lead</span>
+                  <span class="phase-tag" id="phase-data_engineer">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-data_engineer"></div>
+              </div>
+            </div>
+
+            <!-- 11. RISK ANALYST (GOVERNANCE RISK DESK) -->
+            <div class="desk-hotspot placement-side-right tier3-hotspot" id="meeting-card-risk_analyst" data-agent="risk_analyst" style="left: 77%; top: 52%; display: none;">
+              <div class="virtual-desk specialist-desk risk-desk">
+                <span class="desk-icon">⚠️</span>
+                <span class="desk-label">RISK ANALYTICS DESK</span>
+              </div>
+              <div class="floating-agent-pill tier3-pill">
+                <span class="pill-avatar">⚠️</span>
+                <span class="pill-title">Risk Analyst</span>
+                <span class="active-dot">● Active</span>
+              </div>
+              <div class="asking-banner" id="asking-risk_analyst" style="display: none;">❓ ASKING</div>
+              <div class="callout-banner" id="callout-risk_analyst" style="display: none;">🎯 TARGETED</div>
+              <div class="thinking-cloud" id="think-risk_analyst" style="display: none;">
+                <span class="think-pulse">💭</span>
+                <span class="think-text">Modeling Exposure...</span>
+              </div>
+              <div class="speech-bubble-popup placement-side-right" id="bubble-risk_analyst" style="display: none;">
+                <div class="bubble-header">
+                  <span class="agent-title-tag">⚠️ Risk Analyst</span>
+                  <span class="phase-tag" id="phase-risk_analyst">Phase 3</span>
+                </div>
+                <div class="bubble-body custom-scrollbar" id="text-risk_analyst"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- NON-BLOCKING ACTIVE SPEAKER SPOTLIGHT BOX (POSITIONED CLEANLY AT BOTTOM LEFT) -->
+          <div class="active-speaker-spotlight" id="active-speaker-spotlight" style="display: none;">
+            <div class="spotlight-header">
+              <div class="spotlight-agent-info">
+                <span class="spotlight-avatar" id="spotlight-avatar">👨‍💼</span>
+                <span class="spotlight-name" id="spotlight-name">Head of PMO</span>
+                <span class="spotlight-phase" id="spotlight-phase">Phase 1</span>
+              </div>
+              <button class="spotlight-close-btn" onclick="hideActiveSpotlight()">✕</button>
+            </div>
+            <div class="spotlight-body custom-scrollbar" id="spotlight-body"></div>
+          </div>
+
+          <!-- SLIDE-OUT SWARM LOG & EXECUTIVE ADR DRAWER WITH EXPLICIT HIGH-CONTRAST SCROLLBAR -->
+          <aside class="swarm-drawer" id="swarm-drawer">
+            <div class="drawer-header">
+              <div class="drawer-title">
+                <span class="material-icons-outlined icon-purple">receipt_long</span>
+                Swarm Log & Executive ADR
+              </div>
+              <button class="icon-button" onclick="toggleSwarmDrawer()">
+                <span class="material-icons-outlined">close</span>
+              </button>
+            </div>
+
+            <!-- DRAWER TABS -->
+            <div class="drawer-tabs">
+              <button class="drawer-tab active" data-drawer-tab="transcript" onclick="switchDrawerTab('transcript')">📜 Live Log</button>
+              <button class="drawer-tab" data-drawer-tab="adr" onclick="switchDrawerTab('adr')">📑 Executive ADR</button>
+              <button class="drawer-tab" data-drawer-tab="repo" onclick="switchDrawerTab('repo')">💻 Code Repo & Terminal</button>
+            </div>
+
+            <!-- DRAWER CONTENT 1: FULL TRANSCRIPT FEED -->
+            <div class="drawer-panel active custom-scrollbar" id="drawer-panel-transcript">
+              <div class="drawer-log-feed" id="drawer-log-feed">
+                <div class="drawer-empty-state">
+                  <span class="material-icons-outlined">forum</span>
+                  <p>Swarm turns and debates will stream here in real time.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- DRAWER CONTENT 2: EXECUTIVE ADR DELIVERABLE -->
+            <div class="drawer-panel custom-scrollbar" id="drawer-panel-adr" style="display: none;">
+              <div class="drawer-adr-header">
+                <span>Architecture Decision Record Blueprint</span>
+                <button class="g-button secondary compact-btn" onclick="copyDrawerAdr()">
+                  <span class="material-icons-outlined">content_copy</span> Copy
+                </button>
+              </div>
+              <div class="drawer-adr-content" id="drawer-adr-content">
+                <p class="placeholder-text">The final synthesized Architecture Decision Record will appear here once all phases conclude.</p>
+              </div>
+            </div>
+
+            <!-- DRAWER CONTENT 3: AUTONOMOUS REPO & LIVE TERMINAL -->
+            <div class="drawer-panel custom-scrollbar" id="drawer-panel-repo" style="display: none;">
+              <div class="repo-panel-container">
+                <!-- Repo Header Status -->
+                <div class="repo-meta-header">
+                  <div class="repo-title-box">
+                    <span class="material-icons-outlined icon-blue" style="font-size: 28px;">folder_special</span>
+                    <div>
+                      <strong id="repo-title-display">generated_repos/latest_initiative</strong>
+                      <span class="repo-disk-path" id="repo-disk-path-display">~/.gemini/antigravity/scratch/pmo_swarm_app/generated_repos/...</span>
+                    </div>
+                  </div>
+                  <div class="repo-status-tags">
+                    <span class="status-pill status-ready" id="repo-status-badge">⚡ Autonomous Swarm Ready</span>
+                    <span class="status-pill status-test" id="repo-test-badge">🧪 Unit Tests: Pending</span>
+                  </div>
+                </div>
+
+                <!-- Split Explorer: File Tree & Code Viewer -->
+                <div class="repo-explorer-split">
+                  <div class="repo-tree-sidebar custom-scrollbar">
+                    <div class="tree-header">
+                      <span>📁 Generated Files</span>
+                      <span class="file-count-tag" id="repo-file-count-tag">0 files</span>
+                    </div>
+                    <div class="tree-files-list" id="repo-files-list">
+                      <div class="empty-files-placeholder" style="color: #64748b; font-size: 11px; padding: 10px; text-align: center;">No files generated yet. Swarm will write code in Phase 7.</div>
+                    </div>
+                  </div>
+
+                  <div class="repo-code-viewer-container">
+                    <div class="code-viewer-header">
+                      <span class="active-file-name" id="repo-active-filename">README.md</span>
+                      <button class="g-button secondary compact-btn" onclick="copyActiveRepoFile()">
+                        <span class="material-icons-outlined">content_copy</span> Copy File
+                      </button>
+                    </div>
+                    <pre class="code-viewer-pre custom-scrollbar"><code id="repo-code-content">Select a file from the repository tree to inspect implementation code.</code></pre>
+                  </div>
+                </div>
+
+                <!-- Live Terminal & Test Execution Console -->
+                <div class="repo-terminal-container">
+                  <div class="terminal-header">
+                    <div class="terminal-header-title">
+                      <span class="material-icons-outlined terminal-icon" style="color: #38bdf8;">terminal</span>
+                      <span>Agentic Execution & Test Console</span>
+                    </div>
+                    <div class="terminal-actions">
+                      <button class="terminal-btn" onclick="runRepoTestsDirectly()" title="Re-run Unit Tests">⚡ Re-run Tests</button>
+                      <button class="terminal-btn" onclick="clearTerminalLogs()" title="Clear Terminal Logs">✕ Clear</button>
+                    </div>
+                  </div>
+                  <div class="terminal-body custom-scrollbar" id="repo-terminal-body">
+                    <div class="term-line term-system">PMO Agent Swarm Agentic Terminal initialized.</div>
+                    <div class="term-line term-dim">Awaiting tool execution events from Phase 7 specialists...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </section>
+
+      <!-- RIGHT SIDEBAR: FINAL EXECUTIVE ADR & CODE DELIVERABLE -->
+      <aside class="sidebar-right" id="chat-sidebar-right">
+        <div class="card deliverable-card">
+          <div class="card-header-flex">
+            <div class="right-sidebar-tabs">
+              <button class="right-tab active" id="btn-right-adr" onclick="switchRightTab('adr')">
+                <span class="material-icons-outlined icon-yellow">description</span>
+                <span>Executive ADR</span>
+              </button>
+              <button class="right-tab" id="btn-right-code" onclick="switchRightTab('code')">
+                <span class="material-icons-outlined" style="color: #6366f1;">code</span>
+                <span>Codebase 💻</span>
+              </button>
+            </div>
+            <button class="icon-button" id="btn-copy-adr" onclick="copyCurrentRightDeliverable()" title="Copy Current Deliverable">
+              <span class="material-icons-outlined">content_copy</span>
+            </button>
+          </div>
+
+          <!-- ADR VIEW -->
+          <div class="deliverable-body" id="deliverable-body">
+            <div class="deliverable-placeholder">
+              <span class="material-icons-outlined">article</span>
+              <p>The final Architecture Decision Record (ADR) & PMO Master Execution Plan will appear here once the swarm completes synthesis.</p>
+            </div>
+          </div>
+
+          <!-- CODEBASE VIEW -->
+          <div class="deliverable-body custom-scrollbar" id="deliverable-code-body" style="display: none; padding: 0;">
+            <div class="right-code-header">
+              <span id="right-code-filename">README.md</span>
+              <span class="status-pill status-ready" id="right-code-status">Phase 7: Verified</span>
+            </div>
+            <pre class="right-code-pre custom-scrollbar"><code id="right-code-content">Autonomous code implementation will stream here upon ADR approval.</code></pre>
+          </div>
+        </div>
+      </aside>
+
+    </main>
+
+    <!-- UNIFIED MODEL CONFIGURATION MODAL -->
+    <div class="modal-overlay" id="tier-modal" style="display: none;">
+      <div class="modal-card modal-card-wide">
+        <div class="modal-header">
+          <h3>
+            <span class="material-icons-outlined" style="color: #818cf8;">tune</span>
+            Swarm Model Architecture & Endpoints
+          </h3>
+          <button class="icon-button" id="btn-close-modal" onclick="closeModelModal()">
+            <span class="material-icons-outlined">close</span>
+          </button>
+        </div>
+        <p class="modal-desc" id="modal-desc-text">Configure AI inference provider and models. Settings apply automatically across all views and swarm modes.</p>
+
+        <!-- AI INFERENCE PROVIDER SELECTOR IN MODAL -->
+        <div class="provider-switch-container modal-provider-switch">
+          <div class="provider-switch-header">
+            <span class="provider-switch-label">Inference Engine:</span>
+            <div class="provider-toggle-group">
+              <button type="button" class="provider-toggle-btn active" id="modal-provider-local" onclick="switchProvider('local')">
+                <span class="provider-icon">🖥️</span>
+                <span class="provider-name">Local LLM (LM Studio)</span>
+              </button>
+              <button type="button" class="provider-toggle-btn" id="modal-provider-openrouter" onclick="switchProvider('openrouter')">
+                <span class="provider-icon">⚡</span>
+                <span class="provider-name">OpenRouter (Cloud Speed)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- OPENROUTER API KEY & CONTROLS IN MODAL -->
+          <div class="openrouter-controls-bar" id="modal-openrouter-controls-bar" style="display: none;">
+            <div class="openrouter-key-row">
+              <span class="material-icons-outlined key-icon">key</span>
+              <input type="password" id="modal-openrouter-api-key" class="openrouter-key-input" placeholder="Paste OpenRouter API Key (sk-or-v1-...) · Persisted in localStorage" oninput="onApiKeyChanged(this.value)">
+              <button type="button" class="key-vis-btn" onclick="toggleApiKeyVisibility('modal-openrouter-api-key', 'modal-key-icon')" title="Toggle key visibility">
+                <span class="material-icons-outlined" id="modal-key-icon">visibility</span>
+              </button>
+              <button type="button" class="g-button secondary text-btn refresh-models-btn" onclick="fetchOpenRouterModels()" title="Query OpenRouter for live Gemma models">
+                <span class="material-icons-outlined">refresh</span>
+                <span>Refresh Gemma Models</span>
+              </button>
+            </div>
+            <div class="openrouter-speed-badge">
+              <span class="speed-pulse-dot"></span>
+              <strong>⚡ High-Speed Multi-Stream Parallel Execution Active:</strong>
+              <span>6 concurrent streams unlocked across all PMs and specialists.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK PRESET BUTTONS -->
+        <div class="preset-bar-modal" id="modal-presets-bar">
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-tertiary); text-transform: uppercase;">Quick Presets:</span>
+          <button type="button" class="preset-tag" onclick="applyModelPreset('deepseek_r1')">🐳 DeepSeek R1 8B</button>
+          <button type="button" class="preset-tag" onclick="applyModelPreset('hybrid')">⚡ Hybrid Engine</button>
+          <button type="button" class="preset-tag" onclick="applyModelPreset('2b_all')">🚀 All Gemma 4 2B</button>
+          <button type="button" class="preset-tag" onclick="applyModelPreset('12b_all')">🧠 All Gemma 4 12B</button>
+        </div>
+
+        <form id="tier-config-form" onsubmit="event.preventDefault(); saveModelConfig();">
+          <!-- 4 CORE SWARM ROLES & TIERS (UNIFIED) -->
+          <div class="unified-modal-grid">
+            
+            <!-- TIER 1 -->
+            <div class="config-role-box border-tier1">
+              <div class="box-header">
+                <span class="role-emoji">👑</span>
+                <div>
+                  <h4>Tier 1: Executive Lead & Orchestrator</h4>
+                  <p>Head of PMO · Problem decomposition & Master ADR synthesis</p>
+                </div>
+              </div>
+              <div class="box-fields">
+                <div class="field">
+                  <label>Assigned Model</label>
+                  <select id="modal-model-tier1" onchange="syncModelSelection('tier1', this.value)" class="model-dropdown">
+                    <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B (Recommended)</option>
+                    <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                    <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B (Ultra Fast)</option>
+                    <option value="deepseek-r1">DeepSeek R1</option>
+                    <option value="deepseek-v3">DeepSeek V3</option>
+                    <option value="google/gemma-4-2b">Gemma 4 2B</option>
+                    <option value="custom">✏️ Custom Model...</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>LM Studio Base URL</label>
+                  <input type="text" id="modal-url-tier1" value="http://127.0.0.1:1234/v1">
+                </div>
+              </div>
+            </div>
+
+            <!-- TIER 2 -->
+            <div class="config-role-box border-tier2">
+              <div class="box-header">
+                <span class="role-emoji">⚖️</span>
+                <div>
+                  <h4>Tier 2: Program Managers & Arbitrators</h4>
+                  <p>Tech PM & Ops PM · Workstreams & dispute arbitration</p>
+                </div>
+              </div>
+              <div class="box-fields">
+                <div class="field">
+                  <label>Assigned Model</label>
+                  <select id="modal-model-tier2" onchange="syncModelSelection('tier2', this.value)" class="model-dropdown">
+                    <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT (Recommended)</option>
+                    <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                    <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B (Ultra Fast)</option>
+                    <option value="deepseek-r1">DeepSeek R1</option>
+                    <option value="custom">✏️ Custom Model...</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>LM Studio Base URL</label>
+                  <input type="text" id="modal-url-tier2" value="http://127.0.0.1:1234/v1">
+                </div>
+              </div>
+            </div>
+
+            <!-- TIER 3 -->
+            <div class="config-role-box border-tier3">
+              <div class="box-header">
+                <span class="role-emoji">🛠️</span>
+                <div>
+                  <h4>Tier 3: Domain Specialists</h4>
+                  <p>Cloud, Cost, Security, QA · High-speed cross-audits</p>
+                </div>
+              </div>
+              <div class="box-fields">
+                <div class="field">
+                  <label>Assigned Model</label>
+                  <select id="modal-model-tier3" onchange="syncModelSelection('tier3', this.value)" class="model-dropdown">
+                    <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B (Ultra Fast)</option>
+                    <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                    <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                    <option value="google/gemma-4-2b">Gemma 4 2B</option>
+                    <option value="custom">✏️ Custom Model...</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>LM Studio Base URL</label>
+                  <input type="text" id="modal-url-tier3" value="http://127.0.0.1:1234/v1">
+                </div>
+              </div>
+            </div>
+
+            <!-- RED TEAM -->
+            <div class="config-role-box border-redteam">
+              <div class="box-header">
+                <span class="role-emoji">⚖️</span>
+                <div>
+                  <h4>Red Team: Devil's Advocate</h4>
+                  <p>Adversarial stress-testing attacks & 12-month Pre-Mortem</p>
+                </div>
+              </div>
+              <div class="box-fields">
+                <div class="field">
+                  <label>Assigned Model</label>
+                  <select id="modal-model-red" onchange="syncModelSelection('red', this.value)" class="model-dropdown red-select">
+                    <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B (Deep Attack)</option>
+                    <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                    <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                    <option value="deepseek-r1">DeepSeek R1</option>
+                    <option value="custom">✏️ Custom Model...</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Assignment Strategy</label>
+                  <div style="font-size: 11px; color: var(--text-tertiary); padding: 8px 0;">Red Team auditor operates independently to stress-test consensus.</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- OPTIONAL: COLLAPSIBLE PER-AGENT OVERRIDES -->
+          <details class="overrides-details" id="overrides-details">
+            <summary class="overrides-summary">
+              <div class="summary-left">
+                <span class="material-icons-outlined">tune</span>
+                <strong>Advanced: Per-Agent Model Overrides (11 Specialists)</strong>
+              </div>
+              <span class="summary-hint">Click to expand · Leave blank to inherit role tier settings</span>
+            </summary>
+            <div class="agent-overrides-grid">
+              
+              <div class="override-item">
+                <label>👨‍💼 Head of PMO</label>
+                <select id="agent-model-head_pmo" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 1)</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>👨‍💻 Engineering PM</label>
+                <select id="agent-model-tech_pm" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 2)</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>👩‍💼 Ops & Finance PM</label>
+                <select id="agent-model-ops_pm" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 2)</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>🏗️ Cloud Architect</label>
+                <select id="agent-model-cloud_architect" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>💰 Cost Auditor</label>
+                <select id="agent-model-cost_auditor" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>🛡️ Security Lead</label>
+                <select id="agent-model-security_officer" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>🧪 QA & Reliability Lead</label>
+                <select id="agent-model-qa_lead" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>⚙️ DevOps Lead</label>
+                <select id="agent-model-devops_engineer" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>📊 Data Pipeline Lead</label>
+                <select id="agent-model-data_engineer" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                </select>
+              </div>
+
+              <div class="override-item">
+                <label>⚠️ Risk Analyst</label>
+                <select id="agent-model-risk_analyst" class="agent-model-select model-dropdown">
+                  <option value="">(Inherit Tier 3)</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                </select>
+              </div>
+
+              <!-- 11th AGENT: DEVIL'S ADVOCATE -->
+              <div class="override-item override-redteam">
+                <label>⚖️ Devil's Advocate (Red Team)</label>
+                <select id="agent-model-devils_advocate" class="agent-model-select model-dropdown red-select">
+                  <option value="">(Inherit Red Team)</option>
+                  <option value="deepseek/deepseek-r1-0528-qwen3-8b">🐳 DeepSeek R1 Qwen3 8B</option>
+                  <option value="deepseek-r1">🐳 DeepSeek R1</option>
+                  <option value="google/gemma-4-12b-qat">🧠 Gemma 4 12B QAT</option>
+                  <option value="google/gemma-4-e2b">⚡ Gemma 4 e2B</option>
+                </select>
+              </div>
+
+            </div>
+          </details>
+
+          <div class="modal-footer">
+            <button type="button" class="g-button secondary" id="btn-cancel-modal" onclick="closeModelModal()">Cancel</button>
+            <button type="submit" class="g-button primary">Save Swarm Architecture</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- EXECUTIVE INTERJECTION OVERRIDE MODAL -->
+    <div class="modal-overlay" id="directive-modal" style="display: none;">
+      <div class="modal-card directive-modal-card">
+        <div class="modal-header">
+          <h3>
+            <span class="material-icons-outlined" style="color: #fbbc04;">flash_on</span>
+            Interject Executive Override Directive
+          </h3>
+          <button class="icon-button" onclick="toggleDirectiveModal()">
+            <span class="material-icons-outlined">close</span>
+          </button>
+        </div>
+        <p class="modal-desc">Send a live executive constraint directly into the active PMO Swarm (e.g. <em>"Hard cost cap is $10,000/mo. Use PostgreSQL and spot instances."</em>). All agents will immediately adapt their decisions.</p>
+
+        <div class="directive-input-group" style="margin-top: 12px;">
+          <textarea id="directive-text-input" rows="3" placeholder="Enter executive directive or strategic override constraint..." style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; font-family: inherit; font-size: 14px; background: var(--bg-tertiary); color: var(--text-primary); resize: vertical;"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+            <button type="button" class="g-button secondary" onclick="clearExecutiveDirectives()">Clear Directives</button>
+            <button type="button" class="g-button primary" onclick="sendExecutiveDirective()">Apply Live Directive ⚡</button>
+          </div>
+        </div>
+
+        <div class="active-directives-list" style="margin-top: 16px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+          <h4 style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">Active Directives Logged:</h4>
+          <div id="directives-chips" style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-size: 12px; color: var(--text-tertiary); font-style: italic;">No active directives. Debate running standard parameters.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE CONSTRAINT RELAXATION PETITION MODAL (HUMAN-IN-THE-LOOP) -->
+    <div class="modal-overlay" id="relaxation-modal" style="display: none;">
+      <div class="modal-card relaxation-modal-card">
+        <div class="modal-header">
+          <h3>
+            <span class="material-icons-outlined" style="color: #ea4335;">gavel</span>
+            Executive Escalation: Relaxation Petition
+          </h3>
+          <span class="status-badge-live pulse-red">ACTION REQUIRED</span>
+        </div>
+
+        <div class="relaxation-petition-body" style="padding-top: 10px;">
+          <div class="petition-meta-box" style="display: flex; align-items: center; gap: 12px; background: rgba(234, 67, 53, 0.08); border: 1px solid rgba(234, 67, 53, 0.25); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px;">
+            <div style="font-size: 28px;">👨‍💼</div>
+            <div>
+              <div style="font-weight: 700; font-size: 14px; color: var(--text-primary);">Head of PMO (Executive Orchestrator)</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Petitioning on behalf of Tech PM, Ops PM & Cloud Architect</div>
+            </div>
+          </div>
+
+          <div class="petition-question-banner" id="relaxation-question-text" style="font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 14px; line-height: 1.4;">
+            Can we seek a relaxation on project constraints?
+          </div>
+
+          <div class="relaxation-metric-comparison" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 18px;">
+            <div class="comp-box" style="flex: 1;">
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: block; margin-bottom: 2px;">CURRENT CEILING</span>
+              <span id="relaxation-curr-val" style="font-size: 18px; font-weight: 800; color: var(--text-primary);">Stated Baseline</span>
+              <span style="font-size: 11px; color: var(--text-tertiary); display: block;">Original Boundary</span>
+            </div>
+            <div style="font-size: 20px; color: var(--text-tertiary);">➔</div>
+            <div class="comp-box" style="flex: 1; text-align: right;">
+              <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #ea4335; font-weight: 700; display: block; margin-bottom: 2px;">REQUESTED HIKE</span>
+              <span id="relaxation-req-val" style="font-size: 18px; font-weight: 800; color: #ea4335;">+10% Relief</span>
+              <span id="relaxation-req-annual" style="font-size: 11px; color: var(--text-tertiary); display: block;">Proposed Relaxation</span>
+            </div>
+          </div>
+
+          <div class="petition-reason-box" style="background: var(--bg-tertiary); border-left: 3px solid #fbbc04; border-radius: 0 8px 8px 0; padding: 10px 14px; margin-bottom: 18px;">
+            <strong style="font-size: 12px; text-transform: uppercase; color: #fbbc04; display: block; margin-bottom: 2px;">Engineering Rationale:</strong>
+            <p id="relaxation-reason-text" style="font-size: 13px; color: var(--text-primary); margin: 0; line-height: 1.4;">Rigorous analysis determined that strict baseline constraints risk operational compromise.</p>
+          </div>
+
+          <div class="relaxation-decision-controls">
+            <label style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); display: block; margin-bottom: 8px;">Your Executive Ruling (Leadership Decision):</label>
+            <div class="quick-preset-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+              <button type="button" class="preset-btn" onclick="setRelaxationDecision(10, 'Approved full requested 10% increase. Deliver without delay.')" style="padding: 9px 12px; font-size: 12px; font-weight: 600; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); cursor: pointer; text-align: left;">
+                Grant 10% (Full Request)
+              </button>
+              <button type="button" class="preset-btn recommended-btn" onclick="setRelaxationDecision(7, 'Leadership granted 7% compromise. Deal with it.')" style="padding: 9px 12px; font-size: 12px; font-weight: 700; border: 1px solid #1a73e8; border-radius: 8px; background: rgba(26, 115, 232, 0.12); color: #1a73e8; cursor: pointer; text-align: left;">
+                ★ Grant 7% ("Deal with it")
+              </button>
+              <button type="button" class="preset-btn" onclick="setRelaxationDecision(5, 'Approved strict 5% compromise. No further exceptions.')" style="padding: 9px 12px; font-size: 12px; font-weight: 600; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); cursor: pointer; text-align: left;">
+                Grant 5% (Partial)
+              </button>
+              <button type="button" class="preset-btn reject-btn" onclick="setRelaxationDecision(0, 'Strictly rejected. The baseline constraint is final.')" style="padding: 9px 12px; font-size: 12px; font-weight: 600; border: 1px solid rgba(234, 67, 53, 0.3); border-radius: 8px; background: rgba(234, 67, 53, 0.1); color: #ea4335; cursor: pointer; text-align: left;">
+                Deny (0% - Maintain Baseline)
+              </button>
+            </div>
+
+            <div class="custom-relaxation-row" style="margin-top: 14px; display: flex; gap: 12px; align-items: center;">
+              <div style="flex: 1;">
+                <label style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary); display: block; margin-bottom: 4px;">Approved Increase (%)</label>
+                <div style="display: flex; align-items: center; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">
+                  <input type="number" id="input-relaxation-pct" value="7" min="0" max="50" step="0.5" style="width: 55px; background: transparent; border: none; font-size: 16px; font-weight: 700; color: var(--text-primary); outline: none;">
+                  <span style="font-weight: 600; color: var(--text-secondary);">%</span>
+                </div>
+              </div>
+              <div style="flex: 2;">
+                <label style="font-size: 11px; text-transform: uppercase; color: var(--text-secondary); display: block; margin-bottom: 4px;">Binding Directive Note</label>
+                <input type="text" id="input-relaxation-note" value="We got 7% hike deal with it" placeholder="e.g. We got 7% hike deal with it" style="width: 100%; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; padding: 7px 12px; font-size: 13px; color: var(--text-primary); outline: none;">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer" style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 10px;">
+            <button type="button" class="g-button primary" onclick="submitRelaxationDecision()" style="background: linear-gradient(135deg, #ea4335, #c5221f); border-color: #ea4335; font-weight: 600; padding: 9px 20px;">
+              Issue Binding Ruling ⚡
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js?v=the_boardroom_clean_v29"></script>
+</body>
+</html>

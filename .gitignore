@@ -1,0 +1,22 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment & Private Keys
+.env
+pmo_config.json
+.venv/
+venv/
+ENV/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Ephemeral runtime, generated repos & test outputs
+session_records/
+generated_repos/
+*.log
+*.pdf
