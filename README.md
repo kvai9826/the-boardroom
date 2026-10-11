@@ -5,9 +5,9 @@
 
 ---
 
-## 📸 Visual Showcase & System Tour
+## 📸 Visual Showcase
 
-### 1. The 3D Interactive Boardroom (Live Agent Debates, Targeted Callouts & Binding Compromise)
+### The 3D Interactive Boardroom (Live Agent Debates, Targeted Callouts & Binding Compromise)
 *Agents seated across executive, managerial, and domain specialist desks. Active cross-examination highlights targets, grievances trigger escalation lines to management, and binding compromises resolve architectural stalemates.*
 
 ![The Boardroom 3D Office & Agent Disputes](docs/images/boardroom_realistic_agent_dispute_and_escalation.png)
@@ -17,65 +17,77 @@
 * **Active Speech Bubble**: Live question bubble `ASKING @CloudArchitect` during Phase 4 cross-agent debate.
 * **Binding Compromise Arrows**: Glowing green decision arrows delivering the managerial arbitration verdict directly to the executive desk.
 * **Red Team Desk (Left Window)**: The **Devil's Advocate** conducts adversarial pre-mortems to expose catastrophic failure vectors before sign-off.
-
----
-
-### 2. Formal Grievance Escalation & Hierarchical Reporting Lines
-*When an agent detects a budget miscalculation or ungrounded claim, they escalate the peer directly to leadership.*
-
-![Formal Grievance Escalation & Hierarchical Lines](docs/images/boardroom_3d_office_grievance_lines.png)
-
-* **Escalation Notification**: Mathematical calculation error and budget non-compliance filed against specialist proposals.
-* **Multi-Color Reporting Lines**:
-  * **Purple lines**: Executive oversight from Head of PMO to Program Managers.
-  * **Cyan lines**: Technical reporting lines linking Engineering PM to Cloud Architect, QA Lead, and Data Leads.
-  * **Amber lines**: Governance reporting lines linking Ops PM to Cost Auditor, Security Officer, and Risk Analyst.
-  * **Red dashed lines**: Active escalation path from specialist directly to the managerial pod.
+* **Hierarchical Reporting Lines**: Executive oversight (purple), technical reporting (cyan), governance auditing (amber), and grievance escalation (red).
 * **Real-Time Governance Dials**: Live tracking of estimated monthly spend, zero-trust statutory score, and SLA uptime projections.
 
 ---
 
-### 3. Phase 7: Autonomous Codebase Build & Self-Healing Test Loop
-*Following ADR sign-off, the dynamically commissioned Software Engineering Squad writes code into an isolated sandbox, detects unit test failures, and executes an autonomous self-healing fix.*
+## 🛠️ Deep Capabilities & Real-World Actions (What Can The Boardroom Do?)
 
-![Phase 7: Autonomous Codebase Build & Self-Healing Loop](docs/images/boardroom_phase7_self_healing_codebase.png)
+The Boardroom is not just a conversational chatbot; it is an **autonomous software development and executive governance agent swarm equipped with real operating system capabilities, networking tools, and runtime test runners.**
 
-* **Autonomous Self-Healing Loop**: SDET Automation Engineer detects an exit code 1 failure (`Zero-Trust Validation Failed`), reads runtime logs, and executes an autonomous self-healing fix loop.
-* **Split-Pane Code Explorer**: Live display of `src/service.py` being written, inspected, and executed in real time.
-* **Dynamic Roster**: Shows the commissioned organizational hierarchy on the left with live status indicators.
+Below is an exhaustive breakdown of what the application autonomously executes:
 
----
+### 1. Autonomous Software Engineering & Code Generation
+* **Scaffolds Complete Multi-Tier Architectures**: Rather than outputting detached code snippets, the dynamically commissioned Engineering Squad generates full repositories inside an isolated sandbox (`generated_repos/<project_slug>`).
+* **Multi-Role Specialization**:
+  * **Software Development Manager (SDM)**: Scaffolds directory layout, dependency manifests (`requirements.txt`), and architecture documentation (`README.md`).
+  * **Senior Backend SWE**: Writes production service logic with thread-safety, transaction locks, and idempotency guarantees.
+  * **Frontend / Client SWE**: Implements client SDKs, REST controllers, or CLI test drivers.
+  * **DevOps / SRE Lead**: Generates production container definitions (`Dockerfile`, `docker-compose.yml`) and environment templates.
+* **Real Disk Operations**: Files are directly written, read, and structured on the actual host filesystem with directory traversal security protections (`write_file`, `read_file`, `list_files`).
 
-### 4. Live War Room Deliberations & Real-Time ADR Synthesis
-*The split-screen deliberation feed captures multi-turn epistemic debates alongside live Markdown architecture decision blueprints.*
+### 2. Autonomous Unit Testing & Self-Healing Loop
+* **Dynamic Test Suite Authoring**: The **SDET Automation Engineer** analyzes the generated implementation and writes rigorous unit and integration test suites (`tests/test_service.py`).
+* **Real Subprocess Execution (`run_command`)**: The swarm executes the test suite using actual shell commands (`python3 -m unittest` or `pytest`) inside the isolated workspace.
+* **Automated Failure Analysis**: Captures return codes, `stdout`, and `stderr` execution traces.
+* **Autonomous Self-Healing Repair Cycle**:
+  1. If any test fails (exit code $\ne 0$ or assertion error), the failure log is immediately captured and fed back into the Senior SWE.
+  2. The Senior SWE inspects the stack trace, diagnoses the root cause, modifies the source code, and issues a fix.
+  3. The SDET re-executes the test suite automatically.
+  4. The loop repeats until all tests pass with an exit code of `0`.
 
-![The Boardroom War Room Deliberation Feed](docs/images/boardroom_chat_deliberation.png)
+### 3. HTTP Requests, Live Web Search & External API Integration
+* **Asynchronous HTTP Networking**: Equipped with an asynchronous HTTP engine (`httpx.AsyncClient`) for network calls, external service probing, and webhook dispatches.
+* **Live Web Intelligence (`search_web`)**: Autonomously performs real-time queries (via DuckDuckGo API and engineering fallbacks) to retrieve current RFCs, security standards (PCI-DSS, SOC2, HIPAA), cloud pricing benchmarks, and API documentation.
+* **API Validation & Probing**: Capable of sending HTTP requests (GET, POST, PUT, DELETE) to test live APIs, mock payment gateway handshakes, or verify service endpoints.
 
-* **Epistemic Constitution**: Strict categorization (`[REQUIREMENT]`, `[FACT]`, `[ESTIMATE]`, `[PROPOSAL]`, `[UNKNOWN]`).
-* **Deep Reasoning Traces**: Collapsible internal monologue blocks expose agent calculations and chain-of-thought before formal speeches.
-* **Instant ADR Generation**: The synthesized Architecture Decision Record updates dynamically as consensus is forged.
+### 4. Autonomous Git Version Control & Repository Sealing
+* **Automated Repository Initialization**: Automatically runs `git init` inside the project sandbox upon test completion.
+* **Audit-Proof Commit Logging**: Configures the swarm committer identity (`swarm@autonomous-pmo.internal`), stages all newly created files (`git add .`), and crafts a descriptive Git commit hash (`feat: autonomous implementation`).
 
+### 5. Dynamic Organizational Hiring & Workstation Provisioning
+* **Phase 0 Complexity Classification**: The Head of PMO analyzes directive complexity (`Low`, `Medium`, `High`, `Critical`).
+* **On-Demand Specialist Commissioning**: Dynamically hires domain-specific specialists tailored to the directive (e.g. Cloud Architect, Database Specialist, Performance Engineer, Security Officer, Cost Auditor, Regulatory Compliance Auditor, QA Lead).
+* **3D Workstation Allocation**: Vacant desks in the 3D office automatically illuminate and seat agents as commission charters are signed.
 
+### 6. Adversarial Cross-Agent Debates & Epistemic Verification
+* **Epistemic Constitution**: Strict statement tagging enforced across all deliberations (`[REQUIREMENT]`, `[FACT]`, `[ESTIMATE]`, `[PROPOSAL]`, `[UNKNOWN]`).
+* **Targeted Cross-Examinations**: Agents identify and challenge flaws in peer proposals (e.g., Cost Auditor auditing Cloud Architect's cloud spend against budget caps).
+* **Formal Grievance Escalation**: Unsubstantiated claims or budget violations trigger red grievance alerts and escalate the dispute to management.
+* **Binding Managerial Arbitration**: Engineering PM and Ops PM issue binding compromises to resolve deadlocks.
 
----
+### 7. Adversarial 12-Month Pre-Mortem (Devil's Advocate)
+* **Dedicated Red Team Desk**: Seated at the office window, the **Devil's Advocate** runs a simulated 12-month post-launch failure analysis.
+* **Exposes Catastrophic Blindspots**: Uncovers latency spikes under peak load, security authorization handshakes exceeding SLAs, and OpEx budget blowouts before executive sign-off.
 
-### 5. Phase 0: Dynamic Organizational Hiring & Workstation Scaling
-*The Head of PMO assesses challenge complexity and dynamically commissions domain specialists, automatically provisioning new office workstations.*
+### 8. Real-Time 3D Interactive Boardroom & Visual Telemetry
+* **Isometric Visual Office**: High-fidelity interactive floorplan featuring executive pod, managerial desk, specialist desks, and red team desk.
+* **Dynamic Neon Reporting Lines**: Real-time visual vectors illustrating executive oversight (purple), technical reporting (cyan), governance tracking (amber), and active escalations (red).
+* **Speech Bubbles & Camera Tracking**: Smooth pan and zoom (50% to 200%) focusing on active speaking agents.
+* **Live KPI Dashboard**: Instant tracking of estimated monthly spend, zero-trust statutory score, spot savings, and SLA projections.
 
-![Autonomous Dynamic Hiring & Floorplan Scaling](docs/images/boardroom_dynamic_hiring.png)
+### 9. Dual-Inference Engine with Resilience & Rate-Limit Backoff
+* **100% Offline Local Mode**: Integrates directly with LM Studio or Ollama (`http://127.0.0.1:1234/v1`) with zero external data transmission.
+* **Cloud Multi-Streaming (OpenRouter)**: Supports cutting-edge cloud models including 100% Free Tier options (`google/gemma-4-31b-it:free`, `google/gemma-4-26b-a4b-it:free`).
+* **Automatic 429 Exponential Backoff & Fallback**: Enforces intelligent concurrency throttling (2 parallel requests for free tier), auto-retries on HTTP 429 with exponential backoff (5s, 10s, 15s), and dynamically falls back to alternate models if upstream capacity is strained.
 
-* **Dynamic Staffing Roster**: Rather than running a static team, the orchestrator hires specialized leads tailored to the mandate (e.g. Data Pipeline Lead, FinOps Auditor, Distributed Systems Architect).
-* **Workstation Allocation**: Empty desks dynamically illuminate and seat agents as commission charters are signed.
-
----
-
-### 6. Active Agent Speech Hotspot & Workstation Zoom
-*The camera tracks individual workstations as specialists speak, displaying live phase tags and speech popups.*
-
-![Active Agent Speech Hotspot](docs/images/boardroom_agent_speech_hotspot.png)
-
-* **Workstation Speech Bubble**: Shows the Senior Backend SWE actively writing production Python implementation with thread synchronization and idempotency guarantees.
-* **Interactive Pan & Zoom**: Real-time zoom from 50% to 200% across the 3D boardroom floorplan to inspect any agent's live deliberations.
+### 10. Audit-Ready Executive PDF Dossier Generation
+* **Single-Click Compilation**: One click on "Executive PDF" renders a multi-page, publication-grade ReportLab Platypus PDF containing:
+  * Executive Quality & Governance Scorecard (mathematical reconciliation, zero-trust rating, test status, git commit).
+  * Authoritative Architecture Decision Record (ADR).
+  * Complete Swarm Deliberation Transcript with internal reasoning chains.
+  * Full Source Code Inventory with syntax-formatted code files.
 
 ---
 
