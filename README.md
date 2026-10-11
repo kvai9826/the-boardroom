@@ -120,7 +120,7 @@ Clicking **"Executive PDF"** in the top navigation bar compiles the entire initi
 
 ### 1. Clone & Install
 ```bash
-git clone https://github.com/your-username/the-boardroom.git
+git clone https://github.com/kvai9826/the-boardroom.git
 cd the-boardroom
 pip install -r requirements.txt
 ```
