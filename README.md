@@ -7,41 +7,35 @@
 
 ## 📸 Visual Showcase & System Tour
 
-### 1. The Boardroom Executive Workspace (Landing & Directives)
-*Clean, executive-grade single-page application. Submit enterprise directives, attach regulatory PDF documents, and launch autonomous swarms with zero configuration clutter.*
+### 1. The 3D Interactive Boardroom (Live Agent Debates, Targeted Callouts & Binding Compromise)
+*Agents seated across executive, managerial, and domain specialist desks. Active cross-examination highlights targets, grievances trigger escalation lines to management, and binding compromises resolve architectural stalemates.*
 
-![The Boardroom Executive Workspace](docs/images/boardroom_hero_landing_real.png)
-
-* **Enterprise Prompt Architecture**: Decompose directives across financial, statutory, architectural, and security constraints.
-* **Instant Scenarios**: One-click benchmark challenges (Amazon Concurrency, Zero-Trust Banking, 10M Event Streaming).
-* **Dual Inference Engine**: Instant toggle between 100% private local models (LM Studio) and cloud multi-streaming (OpenRouter Free Tier).
-
----
-
-### 2. The 3D Interactive Boardroom (Live Agent Debates & Grievance Escalation)
-*Agents seated across executive, managerial, and specialist desks. Real-time neon reporting lines, formal dispute escalation tribunals, and live KPI dashboards.*
-
-![The 3D Interactive Boardroom](docs/images/boardroom_meeting_debate_real.png)
+![The Boardroom 3D Office & Agent Disputes](docs/images/boardroom_realistic_agent_dispute_and_escalation.png)
 
 * **Top Red Alert Banner**: `⚡ Formal Grievance Filed: Cost Auditor escalated Cloud Architect to Management!`
-* **Multi-Color Reporting Lines**: Purple executive oversight lines, cyan technical reporting lines, amber governance lines, and red grievance escalation paths.
-* **Live Financial & Security HUD**: Real-time tracking of estimated monthly spend ($2,480/mo), spot savings (41%), zero-trust statutory score (8.5/10), and SLA uptime (99.99%).
-* **Active Speech & Targeting**: Dynamic speech bubbles and targeted beacons pinpoint active deliberations.
+* **Targeted Confrontation**: Real-time beacon highlighting `🎯 TARGETED BY DATA PIPELINE LEAD` directly over the Cloud Architect desk.
+* **Active Speech Bubble**: Live question bubble `ASKING @CloudArchitect` during Phase 4 cross-agent debate.
+* **Binding Compromise Arrows**: Glowing green decision arrows delivering the managerial arbitration verdict directly to the executive desk.
+* **Red Team Desk (Left Window)**: The **Devil's Advocate** conducts adversarial pre-mortems to expose catastrophic failure vectors before sign-off.
 
 ---
 
-### 3. Live War Room Deliberations & Real-Time ADR Synthesis
-*The split-screen deliberation feed captures multi-turn epistemic debates alongside live Markdown architecture decision blueprints.*
+### 2. Formal Grievance Escalation & Hierarchical Reporting Lines
+*When an agent detects a budget miscalculation or ungrounded claim, they escalate the peer directly to leadership.*
 
-![Live War Room Deliberations](docs/images/boardroom_chat_war_room_real.png)
+![Formal Grievance Escalation & Hierarchical Lines](docs/images/boardroom_3d_office_grievance_lines.png)
 
-* **Epistemic Constitution**: Strict categorization (`[REQUIREMENT]`, `[FACT]`, `[ESTIMATE]`, `[PROPOSAL]`, `[UNKNOWN]`).
-* **Live Dialogue Stream**: Full transparency into specialist audits, adversarial attacks, and managerial rulings.
-* **Dynamic Architecture Decision Record (ADR)**: Synthesizes requirements, context, alternatives, and decisions in real time.
+* **Escalation Notification**: Mathematical calculation error and budget non-compliance filed against specialist proposals.
+* **Multi-Color Reporting Lines**:
+  * **Purple lines**: Executive oversight from Head of PMO to Program Managers.
+  * **Cyan lines**: Technical reporting lines linking Engineering PM to Cloud Architect, QA Lead, and Data Leads.
+  * **Amber lines**: Governance reporting lines linking Ops PM to Cost Auditor, Security Officer, and Risk Analyst.
+  * **Red dashed lines**: Active escalation path from specialist directly to the managerial pod.
+* **Real-Time Governance Dials**: Live tracking of estimated monthly spend, zero-trust statutory score, and SLA uptime projections.
 
 ---
 
-### 4. Phase 7: Autonomous Codebase Build & Self-Healing Test Loop
+### 3. Phase 7: Autonomous Codebase Build & Self-Healing Test Loop
 *Following ADR sign-off, the dynamically commissioned Software Engineering Squad writes code into an isolated sandbox, detects unit test failures, and executes an autonomous self-healing fix.*
 
 ![Phase 7: Autonomous Codebase Build & Self-Healing Loop](docs/images/boardroom_phase7_self_healing_codebase.png)
@@ -49,6 +43,19 @@
 * **Autonomous Self-Healing Loop**: SDET Automation Engineer detects an exit code 1 failure (`Zero-Trust Validation Failed`), reads runtime logs, and executes an autonomous self-healing fix loop.
 * **Split-Pane Code Explorer**: Live display of `src/service.py` being written, inspected, and executed in real time.
 * **Dynamic Roster**: Shows the commissioned organizational hierarchy on the left with live status indicators.
+
+---
+
+### 4. Live War Room Deliberations & Real-Time ADR Synthesis
+*The split-screen deliberation feed captures multi-turn epistemic debates alongside live Markdown architecture decision blueprints.*
+
+![The Boardroom War Room Deliberation Feed](docs/images/boardroom_chat_deliberation.png)
+
+* **Epistemic Constitution**: Strict categorization (`[REQUIREMENT]`, `[FACT]`, `[ESTIMATE]`, `[PROPOSAL]`, `[UNKNOWN]`).
+* **Deep Reasoning Traces**: Collapsible internal monologue blocks expose agent calculations and chain-of-thought before formal speeches.
+* **Instant ADR Generation**: The synthesized Architecture Decision Record updates dynamically as consensus is forged.
+
+
 
 ---
 
