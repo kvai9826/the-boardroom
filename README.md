@@ -12,13 +12,13 @@
 
 ![The Boardroom 3D Office & Agent Disputes](docs/images/boardroom_realistic_agent_dispute_and_escalation.png)
 
-* **Top Red Alert Banner**: `⚡ Formal Grievance Filed: Cost Auditor escalated Cloud Architect to Management!`
-* **Targeted Confrontation**: Real-time beacon highlighting `🎯 TARGETED BY DATA PIPELINE LEAD` directly over the Cloud Architect desk.
-* **Active Speech Bubble**: Live question bubble `ASKING @CloudArchitect` during Phase 4 cross-agent debate.
-* **Binding Compromise Arrows**: Glowing green decision arrows delivering the managerial arbitration verdict directly to the executive desk.
-* **Red Team Desk (Left Window)**: The **Devil's Advocate** conducts adversarial pre-mortems to expose catastrophic failure vectors before sign-off.
-* **Hierarchical Reporting Lines**: Executive oversight (purple), technical reporting (cyan), governance auditing (amber), and grievance escalation (red).
-* **Real-Time Governance Dials**: Live tracking of estimated monthly spend, zero-trust statutory score, and SLA uptime projections.
+* **Agents Can Debate**: Cross-examine peers in real time, challenging architectural tradeoffs, latency claims, and security proposals.
+* **Agents Can Escalate to Higher-Ups**: File formal grievances directly to engineering and operations management when budgets or policies are breached.
+* **Agents Can Call Out & Target Peers**: Place active visual targeting beacons directly over specialists being cross-audited.
+* **Management Can Issue Binding Compromises**: Settle deadlocked architectural disputes and deliver binding arbitration rulings directly to the executive suite.
+* **Red Team Can Run Adversarial Pre-Mortems**: Simulate 12-month catastrophic failure scenarios to stress-test designs before sign-off.
+* **Leadership Can Trace Hierarchical Reporting**: Real-time visual vectors show executive oversight, technical reporting, governance tracking, and grievance paths.
+* **Executives Can Monitor Live Governance Dials**: Track real-time estimated monthly spend, zero-trust compliance scores, and SLA uptime projections.
 
 ---
 
