@@ -67,6 +67,16 @@
 
 ---
 
+### 6. Active Agent Speech Hotspot & Workstation Zoom
+*The camera tracks individual workstations as specialists speak, displaying live phase tags and speech popups.*
+
+![Active Agent Speech Hotspot](docs/images/boardroom_agent_speech_hotspot.png)
+
+* **Workstation Speech Bubble**: Shows the Senior Backend SWE actively writing production Python implementation with thread synchronization and idempotency guarantees.
+* **Interactive Pan & Zoom**: Real-time zoom from 50% to 200% across the 3D boardroom floorplan to inspect any agent's live deliberations.
+
+---
+
 ## ⚡ The 8-Phase Governance Lifecycle
 
 ```mermaid
