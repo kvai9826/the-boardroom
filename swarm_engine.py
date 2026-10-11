@@ -30,7 +30,7 @@ class SwarmEngine:
         self.agents = AGENTS
         self.provider: str = DEFAULT_PROVIDER  # "local" or "openrouter"
         self.openrouter_api_key: str = OPENROUTER_API_KEY
-        self.concurrency_limit: int = 6 if self.provider == "openrouter" else 1
+        self.concurrency_limit: int = 2 if self.provider == "openrouter" else 1
         self._llm_semaphore = asyncio.Semaphore(self.concurrency_limit)
         self.is_running = False
         self.stop_requested = False
@@ -323,7 +323,7 @@ class SwarmEngine:
             headers["X-Title"] = "The Boardroom Swarm Studio"
 
         candidate_urls = self._discover_active_endpoints(base_url)
-        max_retries = 3 if is_openrouter else 2
+        max_retries = 4 if is_openrouter else 2
         last_exception = None
         
         # Explicit timeout configuration allowing up to 10 minutes for deep local inference or cloud requests
@@ -381,6 +381,20 @@ class SwarmEngine:
                                         await asyncio.sleep(backoff_wait)
                                         continue
                                     raise Exception("Payment Required: OpenRouter account has insufficient credits or quota.")
+                                elif res.status_code == 429:
+                                    if attempt < max_retries:
+                                        backoff_wait = 5.0 * attempt + (3.0 if "rate-limited upstream" in err_text else 0.0)
+                                        logger.warning(f"OpenRouter rate limit (429) encountered for {agent_id} on model {payload['model']}. Backing off {backoff_wait}s (attempt {attempt}/{max_retries})...")
+                                        # If upstream Google AI Studio cluster is rate limited on 26b, fallback to 31b (or vice-versa)
+                                        if "temporarily rate-limited upstream" in err_text or "rate_limited" in err_text:
+                                            if "26b" in payload["model"]:
+                                                payload["model"] = "google/gemma-4-31b-it:free"
+                                                logger.info(f"Switching {agent_id} fallback model to google/gemma-4-31b-it:free")
+                                            elif "31b" in payload["model"]:
+                                                payload["model"] = "google/gemma-4-26b-a4b-it:free"
+                                                logger.info(f"Switching {agent_id} fallback model to google/gemma-4-26b-a4b-it:free")
+                                        await asyncio.sleep(backoff_wait)
+                                        continue
                                 last_exception = Exception(f"HTTP {res.status_code}: {err_text}")
                                 continue
 
