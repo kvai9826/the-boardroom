@@ -274,6 +274,8 @@ class SwarmEngine:
         temperature = cfg["temperature"]
         max_tokens = cfg["max_tokens"]
 
+        is_openrouter = "openrouter.ai" in base_url.lower() or self.provider == "openrouter" or (bool(self.openrouter_api_key) and "openrouter" in base_url.lower())
+
         # Ensure reasoning models (e.g. DeepSeek-R1) have enough room for both thinking tokens and final output
         is_reasoning_model = any(k in model_name.lower() for k in ["r1", "deepseek-r1", "reasoner", "thinking"])
         if is_reasoning_model and max_tokens < 4096:
