@@ -383,16 +383,19 @@ class SwarmEngine:
                                     raise Exception("Payment Required: OpenRouter account has insufficient credits or quota.")
                                 elif res.status_code == 429:
                                     if attempt < max_retries:
-                                        backoff_wait = 5.0 * attempt + (3.0 if "rate-limited upstream" in err_text else 0.0)
+                                        backoff_wait = 4.0 * attempt + (2.0 if "rate-limited upstream" in err_text else 0.0)
                                         logger.warning(f"OpenRouter rate limit (429) encountered for {agent_id} on model {payload['model']}. Backing off {backoff_wait}s (attempt {attempt}/{max_retries})...")
-                                        # If upstream Google AI Studio cluster is rate limited on 26b, fallback to 31b (or vice-versa)
-                                        if "temporarily rate-limited upstream" in err_text or "rate_limited" in err_text:
+                                        # Resilient cascade when upstream Google AI Studio cluster is rate limited:
+                                        if "temporarily rate-limited upstream" in err_text or "rate_limited" in err_text or "rate limit" in err_text.lower():
                                             if "26b" in payload["model"]:
                                                 payload["model"] = "google/gemma-4-31b-it:free"
                                                 logger.info(f"Switching {agent_id} fallback model to google/gemma-4-31b-it:free")
                                             elif "31b" in payload["model"]:
-                                                payload["model"] = "google/gemma-4-26b-a4b-it:free"
-                                                logger.info(f"Switching {agent_id} fallback model to google/gemma-4-26b-a4b-it:free")
+                                                payload["model"] = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+                                                logger.info(f"Switching {agent_id} fallback model to nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free")
+                                            else:
+                                                payload["model"] = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+                                                logger.info(f"Switching {agent_id} fallback model to nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free")
                                         await asyncio.sleep(backoff_wait)
                                         continue
                                 last_exception = Exception(f"HTTP {res.status_code}: {err_text}")

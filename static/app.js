@@ -2507,7 +2507,7 @@ async function saveModelConfig(silent = false) {
   const payload = {
     provider: currentProvider,
     openrouter_api_key: openrouterApiKey,
-    concurrency_limit: (currentProvider === 'openrouter') ? 6 : 1,
+    concurrency_limit: (currentProvider === 'openrouter') ? 2 : 1,
     tier1: {
       base_url: (currentProvider === 'openrouter' && (!url1 || url1.includes('127.0.0.1'))) ? 'https://openrouter.ai/api/v1' : url1,
       model_name: m1
